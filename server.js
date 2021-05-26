@@ -6,6 +6,7 @@ const { default: createShopifyAuth } = require("@shopify/koa-shopify-auth");
 const { verifyRequest } = require("@shopify/koa-shopify-auth");
 const { default: Shopify, ApiVersion } = require("@shopify/shopify-api");
 const Router = require("koa-router");
+const axios = require("axios");
 
 dotenv.config();
 
@@ -60,6 +61,21 @@ app.prepare().then(() => {
     } else {
       await handleRequest(ctx);
     }
+  });
+
+  router.get("/getProducts", verifyRequest(), async (ctx, res) => {
+    const { shop, accessToken } = ctx.session;
+    const url = `https://${shop}/admin/api/2021-04/products.json`;
+
+    const shopifyHeader = (token) => ({
+      "Content-Type": "application/json",
+      "X-Shopify-Access-Token": token,
+    });
+
+    const getProducts = await axios.get(url, { headers: shopifyHeader(accessToken) });
+
+    ctx.body = getProducts.data;
+    ctx.res.statusCode = 200;
   });
 
   router.get("(/_next/static/.*)", handleRequest);

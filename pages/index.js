@@ -1,9 +1,18 @@
-import { TextStyle } from "@shopify/polaris";
+import { Card, Layout, Page, TextStyle } from "@shopify/polaris";
 
 const Index = () => (
-  <div>
-    <TextStyle variation="positive">Sample app using React and Next.js</TextStyle>
-  </div>
+  <Page>
+    <Layout.AnnotatedSection
+      title="Products"
+      description="List of products in this section"
+    >
+      <Card sectioned>
+        <div>
+          <TextStyle variation="strong">List of products here:</TextStyle>
+        </div>
+      </Card>
+    </Layout.AnnotatedSection>
+  </Page>
 );
 
 export default Index;
